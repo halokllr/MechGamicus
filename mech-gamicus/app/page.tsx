@@ -1,25 +1,52 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default async function Home() {
-  const { data, error } = await supabase
-    .from("pilot_db")
-    .select("*");
+export default function Home() {
+  const [pilot, setPilot] = useState<any>(null);
 
-  if (error) {
-    return <pre>{JSON.stringify(error, null, 2)}</pre>;
+  useEffect(() => {
+    const loadPilot = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("pilot_db")
+        .select("*")
+        .eq("pilot_id", user.id)   // ✅ your schema
+        .single();
+
+      if (!error) setPilot(data);
+    };
+
+    loadPilot();
+  }, []);
+
+  // Logout Function
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/login";
   }
 
-  return (
-    <main>
-      <h1>Pilot List</h1>
+  if (!pilot) return <div>Loading...</div>;
 
-      {data?.map((pilot) => (
-        <div key={pilot.pilot_id} style={{ marginBottom: "1rem" }}>
-          <div><strong>ID:</strong> {pilot.pilot_id}</div>
-          <div><strong>Balance:</strong> {pilot.balance}</div>
-          <div><strong>Created:</strong> {pilot.created_at}</div>
-        </div>
-      ))}
+  return (
+    <main style={{ padding: "2rem" }}>
+      <h1>My Pilot Profile</h1>
+
+      <p><strong>Pilot ID:</strong> {pilot.pilot_id}</p>
+      <p><strong>Balance:</strong> {pilot.balance}</p>
+      <p><strong>Created:</strong> {pilot.created_at}</p>
+
+      <br />
+
+      <button onClick={handleLogout}>
+        Logout
+      </button>
     </main>
   );
 }
