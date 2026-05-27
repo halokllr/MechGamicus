@@ -1,26 +1,128 @@
-@import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* LIGHT MODE - clean industrial */
+  --bg: #f5f5ee;
+  --panel: #ffffff;
+  --text: #111;
+
+  --primary: #1976d2;   /* system blue */
+  --accent: #ffcc00;    /* warning yellow */
+
+  --border: #cfd8dc;
+  --grid: rgba(0, 0, 0, 0.04);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+[data-theme="dark"] {
+  /* DARK MODE - Gundam cockpit vibe */
+  --bg: #0b0f14;
+  --panel: #121922;
+  --text: #d8e1e8;
+
+  --primary: #3fa9ff;
+  --accent: #ffd400;
+
+  --border: #253040;
+  --grid: rgba(255, 255, 255, 0.03);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Base */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, sans-serif;
+
+  /* subtle grid */
+  background-image: linear-gradient(
+      to right,
+      var(--grid) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Panel styling */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: 4px; /* less rounded = more industrial */
+  position: relative;
+}
+
+/* subtle corner line effect */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--primary);
+}
+
+/* Buttons */
+button {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.navItem {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.navItem:hover {
+  color: var(--primary);
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  height: 100vh;
+}
+
+.mainContent {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(150px, auto);
+  gap: 1rem;
+}
+
+/* panel sizes */
+.panel-wide {
+  grid-column: span 2;
+}
+
+/* System text */
+.mono {
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+}
+
+.menuItem {
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-decoration: none;
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-left: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.menuItem:hover {
+  color: var(--accent);
+  border-left: 2px solid var(--accent);
+  padding-left: 1.5rem;
 }
