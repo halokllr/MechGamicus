@@ -19,15 +19,32 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en">
+      <body>
+        {/* Top bar */}
+        <header
+          style={{
+            padding: "1rem",
+            background: "#111",
+            color: "#fff",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>MechGamicus</div>
+          <nav>
+            <a href="/" style={{ marginRight: "1rem", color: "#fff" }}>
+              Dashboard
+            </a>
+          </nav>
+        </header>
+
+        <div style={{ padding: "2rem" }}>{children}</div>
+      </body>
     </html>
   );
 }
